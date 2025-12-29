@@ -1,6 +1,6 @@
 import React from 'react';
 import { SongRecommendation } from '../types';
-import { Mic, Music2, Heart, Youtube, Zap } from 'lucide-react';
+import { Mic, Music2, Heart, Youtube, Zap, Move, Clock } from 'lucide-react';
 
 interface SongCardProps {
   song: SongRecommendation;
@@ -65,13 +65,18 @@ const SongCard: React.FC<SongCardProps> = ({ song, index, isFavorite, onToggleFa
         </div>
       </div>
       
-      <div className="mb-4 flex flex-wrap gap-2">
+      <div className="mb-4 flex flex-wrap gap-2 items-center">
          <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold border uppercase tracking-wider ${getDifficultyColor(song.difficultyRating)}`}>
             {song.difficultyRating}
           </span>
          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 uppercase tracking-wider">
             {song.vibe}
           </span>
+          {song.duration && (
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border border-white/10 bg-white/5 text-gray-400">
+              <Clock className="w-3 h-3" /> {song.duration}
+            </span>
+          )}
       </div>
 
       <div className="space-y-4 mb-6 flex-grow">
@@ -79,11 +84,23 @@ const SongCard: React.FC<SongCardProps> = ({ song, index, isFavorite, onToggleFa
             <p className="text-sm text-gray-300 italic">"{song.reason}"</p>
         </div>
 
-        <div className="flex items-start gap-2">
-            <Mic className="w-4 h-4 text-pink-400 mt-1 flex-shrink-0" />
-            <div>
-                <span className="text-xs text-gray-400 uppercase font-bold tracking-widest block mb-1">Pro Tip</span>
-                <span className="text-sm text-gray-200">{song.singingTip}</span>
+        <div className="grid grid-cols-1 gap-3">
+            {/* Vocal Tip */}
+            <div className="flex items-start gap-2">
+                <Mic className="w-4 h-4 text-pink-400 mt-1 flex-shrink-0" />
+                <div>
+                    <span className="text-xs text-gray-400 uppercase font-bold tracking-widest block mb-1">Vocal Tip</span>
+                    <span className="text-sm text-gray-200">{song.singingTip}</span>
+                </div>
+            </div>
+
+            {/* Stage Action */}
+            <div className="flex items-start gap-2">
+                <Move className="w-4 h-4 text-cyan-400 mt-1 flex-shrink-0" />
+                <div>
+                    <span className="text-xs text-gray-400 uppercase font-bold tracking-widest block mb-1">Stage Action</span>
+                    <span className="text-sm text-gray-200">{song.actionMove || "Freestyle and have fun!"}</span>
+                </div>
             </div>
         </div>
       </div>

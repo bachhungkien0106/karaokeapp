@@ -15,9 +15,11 @@ export interface SongRecommendation {
   reason: string;
   difficultyRating: 'Easy' | 'Medium' | 'Hard' | 'Expert';
   singingTip: string;
+  actionMove: string;
   vibe: string;
   youtubeQuery: string;
   performanceType: 'Singing' | 'Dancing';
+  duration: string;
 }
 
 export interface RecommendationResult {

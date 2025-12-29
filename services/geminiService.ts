@@ -20,11 +20,13 @@ const responseSchema = {
           reason: { type: Type.STRING },
           difficultyRating: { type: Type.STRING, enum: ['Easy', 'Medium', 'Hard', 'Expert'] },
           singingTip: { type: Type.STRING },
+          actionMove: { type: Type.STRING, description: "A simple physical action or dance move for the singer or crowd" },
           vibe: { type: Type.STRING },
           performanceType: { type: Type.STRING, enum: ['Singing', 'Dancing'] },
-          youtubeQuery: { type: Type.STRING }
+          youtubeQuery: { type: Type.STRING },
+          duration: { type: Type.STRING, description: "Estimated duration of the song in MM:SS format" }
         },
-        required: ['title', 'artist', 'reason', 'difficultyRating', 'singingTip', 'vibe', 'performanceType', 'youtubeQuery']
+        required: ['title', 'artist', 'reason', 'difficultyRating', 'singingTip', 'actionMove', 'vibe', 'performanceType', 'youtubeQuery', 'duration']
       }
     }
   },
@@ -35,7 +37,7 @@ export const getKaraokeRecommendations = async (prefs: UserPreferences): Promise
   try {
     const prompt = `
       Act as an expert Karaoke DJ and Voice Coach.
-      I need a setlist based on:
+      I need a massive setlist based on:
       - Mood: ${prefs.mood}
       - Genre: ${prefs.genre}
       - Difficulty: ${prefs.difficulty}
@@ -46,16 +48,18 @@ export const getKaraokeRecommendations = async (prefs: UserPreferences): Promise
       - Danceability: ${prefs.danceability}
 
       1. Generate a "story" (string): A creative, immersive 2-3 sentence intro that sets the scene for this specific playlist. Make the user feel like the star.
-      2. Generate 6 song recommendations.
+      2. Generate 20 song recommendations.
       
       For each song:
       - Title & Artist
       - Reason (The "Why")
       - Difficulty Rating
-      - Pro Tip
+      - Pro Tip (Vocal advice)
+      - Action Move: A specific, simple physical action, gesture, or mini-dance move for the singer to perform to engage the crowd (e.g. "Air guitar solo", "Slow arm wave", "Point at audience on chorus", "Dramatic spin").
       - Vibe Tag
       - performanceType (Singing/Dancing)
       - youtubeQuery ("Title Artist Karaoke Version" or "Title Artist Dance Practice")
+      - duration (Estimated length in MM:SS)
     `;
 
     const response = await ai.models.generateContent({
@@ -85,16 +89,18 @@ export const generateDJPlaylist = async (vision: string, crowd: string): Promise
       CROWD: "${crowd}"
 
       1. Generate a "story" (string): A short, hype-building narrative intro. "Okay, picture this..." type of energy that describes the vibe of the room this playlist will create.
-      2. Create a cohesive 6-song setlist that fits this specific narrative.
+      2. Create a cohesive 20-song setlist that fits this specific narrative.
 
       For each song:
       - Title & Artist
       - Reason
       - Difficulty Rating
       - Singing Tip
+      - Action Move: A simple physical action or gesture for the singer to do.
       - Vibe Tag
       - performanceType (Singing/Dancing)
       - youtubeQuery
+      - duration (Estimated length in MM:SS)
     `;
 
     const response = await ai.models.generateContent({
